@@ -55,7 +55,10 @@ function MainHeader() {
     
     }
   })
-
+  // xử lý ẩn thanh scroll body 
+  const handleHideScrollBody=()=>{
+     document.body.style.overflowY='hidden'
+  }
   return <>
   <div className='h-[60px] border-b border-borderColor fixed  w-full z-20  bg-whiteColor '>
     <div className=' relative  max-w-5xl m-auto h-full   flex items-center px-10  '>
@@ -74,7 +77,7 @@ function MainHeader() {
             <div className='flex space-x-6 text-2xl items-center pl-5 '>
             <AiFillHome className='cursor-pointer'/>
             <FiSend className='cursor-no-drop'/>  
-            <Link to='/create/select'><BiMessageSquareAdd  className='cursor-pointer'/></Link>
+            <Link onClick={handleHideScrollBody} to='/create/select'><BiMessageSquareAdd  className='cursor-pointer'/></Link>
             <ImCompass2 className='cursor-no-drop'/>
             <AiOutlineHeart className='text-[28px] cursor-no-drop'/>
              

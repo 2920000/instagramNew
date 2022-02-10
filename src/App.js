@@ -3,12 +3,15 @@ import React,{memo} from 'react';
 import {useDispatch,useSelector} from 'react-redux'
 import Login from './components/Login';
 import MainPage from './components/MainPage';
+import {AiOutlineInstagram} from 'react-icons/ai'
 import {onAuthStateChanged,getAuth} from 'firebase/auth'
 import { useEffect, useState } from 'react';
 import { LOGIN_USER_INFOR } from './features/loginSlice';
 import { getUsersFromFirebase } from './features/usersSilce';
 import { getPostsFromFirebase } from './features/postsSlice';
 function App() {
+  const [x,setX]=useState(null)
+const [y,setY]=useState(null)
   const [user,setUser]=useState()
   const dispatch=useDispatch()
   const auth= getAuth()
@@ -30,20 +33,23 @@ function App() {
         avatar:user.photoURL
       } 
       dispatch(LOGIN_USER_INFOR(loginUserInfor))
+      setX(true)
+      setY(false)
     }
     else
       {
         setUser('') 
+        setY(true) 
+        setX(false)
       }
   })
 })
  
- if(user){
-  return  <MainPage/>
- }
- else{
-  return <Login/>
- }
+ return <>
+    {x===null&&y===null?<div className='h-screen flex items-center justify-center'><AiOutlineInstagram className=' text-greyColor text-6xl' /></div>:''}
+     {x&&<MainPage/>}
+     {y&&<Login/>}
+ </>
 }
 
 

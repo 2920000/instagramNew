@@ -28,4 +28,4 @@ export default usersSlice.reducer
 // actions
 export const {GET_ALL_USERS} =usersSlice.actions
 // selects
-export const selectAllUsers=state=>state.users
+export const selectAllUsers=state=>state.users.allUsers

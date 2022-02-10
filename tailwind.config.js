@@ -3,6 +3,9 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    // screens:{
+    //   'laptop': '822px',
+    // },
     extend: {
       keyframes: {
       opacity: {

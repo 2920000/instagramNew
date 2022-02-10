@@ -4,6 +4,7 @@
 
 body{
     background-color: #fafafa;
+    box-sizing: border-box;
 }
 img{
     max-width: none;

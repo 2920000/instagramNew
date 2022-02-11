@@ -19,16 +19,16 @@ const postSlice = createSlice({
     GET_PRE_AVATAR: (state, action) => {
       state.preAvatar = action.payload;
     },
-    ADD_POST_REQUEST: (state, action) => {
+    ADD_POST_REQUEST: (state) => {
       state.load = true;
     },
-    ADD_POST_SUCCESS: (state, action) => {
+    ADD_POST_SUCCESS: (state) => {
       state.load = false;
     },
-    SHOW_BOX_CREATE_POST:(state,action)=>{
+    SHOW_BOX_CREATE_POST:(state)=>{
       state.isShow=true
     },
-    OFF_BOX_CREATE_POST:(state,action)=>{
+    OFF_BOX_CREATE_POST:(state)=>{
       state.isShow=false
     }
   },
@@ -45,9 +45,7 @@ export const selectIsShow=state=>state.post.isShow
 // async action thêm post vào firebase
 export const addPostToFirebase = (postData,userLoginDocId,postsNumber) => async (dispatch) => {
   dispatch(ADD_POST_REQUEST(true));
-  const storageRef = ref(
-    storage,
-    `${postData.type}` + postData.postPictureUpToFirebaseStorage.name
+  const storageRef = ref(storage,`${postData.type}` + postData.postPictureUpToFirebaseStorage.name
   );
   const uploadTask = uploadBytesResumable(
     storageRef,
@@ -73,11 +71,13 @@ export const addPostToFirebase = (postData,userLoginDocId,postsNumber) => async 
           comments: [],
           type: postData.type,
           createAt: moment().format(),
+          docIdUser:userLoginDocId,
         });
         updateDoc(doc(db,'users',userLoginDocId),{
            postsNumber:postsNumber+1
         })
         dispatch(ADD_POST_SUCCESS(false));
+        document.body.style.overflowY='auto'
       });
     }
   );

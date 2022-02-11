@@ -16,16 +16,16 @@ const [y,setY]=useState(null)
   const dispatch=useDispatch()
   const auth= getAuth()
   // khi load lại trang , lấy dữ liệu từ firebase đổ vào store để dùng
-    window.onload=function(){
-      dispatch(getUsersFromFirebase())
-      dispatch(getPostsFromFirebase())
-    }
+   
   
 
   useEffect(()=>{
    onAuthStateChanged(auth,user=>{
     if(user){
-      setUser(user)
+       // khi tồn tại user dispatch mọi dự liệu cần thiết để sử dụng toàn cục
+        setUser(user)
+        dispatch(getUsersFromFirebase(user.uid))
+        dispatch(getPostsFromFirebase())
       // một số thông tin cần thiết của user đang đăng nhập
       const loginUserInfor={
         userId:user.uid,

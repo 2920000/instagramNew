@@ -8,12 +8,11 @@ function PersonalPosts() {
   const {userId}=useParams()
   const allPosts=useSelector(selectAllPosts)
   const filterPostsById=allPosts.filter(post=>post.userId===userId)
-  console.log(filterPostsById)
   return (
   <>{filterPostsById.length>0? <div className='grid  grid-cols-1 sm:grid-cols-2 sm:justify-center lg:grid-cols-3 gap-6'>
   {filterPostsById.map(post=><div key={post.postId} className='relative'>
     {post.type==='image'
-    ?<div><img  className='w-full   h-[300px]   object-cover' src={post.pictureOrVideoOfPost}  alt='' /></div>
+    ?<div><img  className='w-full  h-[300px]   object-cover' src={post.pictureOrVideoOfPost}  alt='' /></div>
     :<div>
       <video controls>
         <source src={post.pictureOrVideoOfPost} type='video/mp4' />

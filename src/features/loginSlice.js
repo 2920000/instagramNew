@@ -2,6 +2,7 @@ import {createSlice,createAsyncThunk} from '@reduxjs/toolkit'
 import { db } from '../configFirebase'
 import {signInWithPopup,getAuth,FacebookAuthProvider} from 'firebase/auth'
 import {addDoc,collection,onSnapshot} from 'firebase/firestore'
+import {useSelector} from 'react-redux'
 
 const auth=getAuth()
 const provider= new FacebookAuthProvider()
@@ -12,6 +13,8 @@ export const getUserInfor=createAsyncThunk(
     async()=>{
         const logInInfor = await signInWithPopup(auth,provider)
         const userInfor=logInInfor.user
+        console.log(userInfor)
+        
         // lấy users về từ firebase để kiểm tra sự tồn tại , nếu Id trùng thì không thêm vào nữa    
         onSnapshot(collection(db,'users'),usersDocs=>{
              const allUsers= usersDocs.docs.map(docs=>docs.data())
@@ -25,13 +28,15 @@ export const getUserInfor=createAsyncThunk(
                     avatar:userInfor.photoURL,
                     postsNumber:0,
                     followers:[],
-                    following:[]
+                    following:[],
+                    isReady:false,
                 
                 })
               }
              
            
         })
+    
          
     }
 )

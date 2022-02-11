@@ -3,20 +3,28 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
 import { FiSend, FiBookmark } from "react-icons/fi";
 import { CgSmile } from "react-icons/cg";
+import {BsFillBookmarkFill,BsThreeDots} from 'react-icons/bs'
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { selectAllPosts } from "../features/postsSlice";
 import { selectLoginUserInfor } from "../features/loginSlice";
 import { actionHandleLoved } from "../features/postsSlice";
 import { actionHandleSubmitComment } from "../features/postsSlice";
+import { actionHandleSavePost } from "../features/postsSlice";
+import { selectAllUsers } from "../features/usersSilce";
+import { ADJUST_POST } from "../features/postsSlice";
+import { selectLoginUserFullData } from "../features/usersSilce";
 import moment from "moment";
 function Posts() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // Lấy ra những posts có trong firebase
   const posts = useSelector(selectAllPosts);
+  const allUsers=useSelector(selectAllUsers)
   // lấy thông tin user đang đăng nhập
   const loginUserInfor = useSelector(selectLoginUserInfor);
+  //
+  const loginUserInforFullData=useSelector(selectLoginUserFullData)
   const [message, setMessage] = useState("");
   // xử lý  xem user đã thả tim hay chưa,nếu thả tim rồi sẽ xóa đi,còn chưa thả tim sẽ được thêm vào
   const handleLove = (docId, love) => {
@@ -45,7 +53,22 @@ function Posts() {
     }
     sessionStorage.removeItem("positionOfScrollBody");
   });
+ 
+ 
+  // xử lý dispatch hiển thị hộp adjust-post  
+   const handleShowBoxAdjustPost=(docIdOfPost,userIdOfPost,docIdUser)=>{
+     const  data={
+      isShowOverlay:true,
+      docIdToDelete:docIdOfPost,
+      userIdOfPost:userIdOfPost,
+      docIdToUpdateNumberPosts:docIdUser,
+      prePostsNumberOfUser:loginUserInforFullData.postsNumber
 
+     }
+     dispatch(ADJUST_POST(data))
+     document.body.style.overflowY='hidden'
+   }
+  
   return (
     <div>
       {posts.length > 0 ? (
@@ -55,7 +78,7 @@ function Posts() {
               key={post.postId}
               className="my-5 border border-borderColor rounded"
             >
-              <div className="flex p-3 justify-between">
+              <div className="flex p-3 justify-between " >
                <Link to={`${post.userId}`} >
                <div className="flex gap-x-4 items-center  ">
                   <img
@@ -66,7 +89,7 @@ function Posts() {
                   <span className="text-sm font-medium">{post.userName}</span>
                 </div>
                </Link>
-                <div className="font-medium text-xl">...</div>
+                <div onClick={()=>{handleShowBoxAdjustPost(post.docId,post.userId,post.docIdUser)}} className="font-medium cursor-pointer text-xl"><BsThreeDots/></div>
               </div>
               <div>
                 {post.type === "image" ? (
@@ -122,7 +145,7 @@ function Posts() {
                   </span>
                 </div>
                 <div>
-                  <FiBookmark className="text-[26px] cursor-pointer" />
+                 {}
                 </div>
               </div>
               <div className="px-5 pb-5">

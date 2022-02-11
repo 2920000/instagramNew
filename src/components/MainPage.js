@@ -8,12 +8,15 @@ import CreatePost from "./CreatePost";
 import PersonalPosts from "./PersonalPosts";
 import PersonalSaved from "./PersonalSaved";
 import PersonalTagged from "./PersonalTagged";
+import AdjustPostOverlay from "./AdjustPostOverlay";
+import UnFollowBoxWithOverlay from "./UnFollowBoxWithOverlay";
 function MainPage() {
-  // đặt sai route , lần sau cẩn thận đặt lại
   return (
     <div>
-       <CreatePost />
       <Router>
+      <CreatePost />
+       <AdjustPostOverlay/>
+       <UnFollowBoxWithOverlay/>
         <MainHeader />
         <Routes>
           <Route path="/" element={<MainBody />} />

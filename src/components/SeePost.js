@@ -3,12 +3,14 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
 import { FiSend, FiBookmark } from "react-icons/fi";
 import { CgSmile } from "react-icons/cg";
-import { useNavigate } from "react-router-dom";
+import {BsThreeDots} from 'react-icons/bs'
 import { useSelector ,useDispatch} from "react-redux";
 import { selectLoginUserInfor } from "../features/loginSlice";
 import { selectAllPosts } from "../features/postsSlice";
 import { useParams } from "react-router-dom";
 import { actionHandleLoved,actionHandleSubmitComment } from "../features/postsSlice";
+import { selectLoginUserFullData } from "../features/usersSilce";
+import { ADJUST_POST } from "../features/postsSlice";
 import moment from "moment";
 
 function SeePost() {
@@ -17,25 +19,34 @@ function SeePost() {
   const { postId } = useParams();
   const overlayRef = useRef();
   const commentRef=useRef()
-  const navigate = useNavigate();
   const loginUserInfor = useSelector(selectLoginUserInfor);
   const allPosts = useSelector(selectAllPosts);
   const filterPostsById = allPosts.find((post) => post.postId === postId);
+  const loginUserInforFullData=useSelector(selectLoginUserFullData)
+
   // handle Click ra ngoài phần tử
   // mai sửa lại
   useEffect(() => {
     document.body.style.overflowY='hidden'
-    const event = window.addEventListener("mousedown", (event) => {
-      if (overlayRef.current) {
-        if (overlayRef.current === event.target) {
-          window.history.go(-1)
-          document.body.style.overflowY='auto'
-        }
+    // const event = window.addEventListener("mousedown", (event) => {
+    //     if (overlayRef.current === event.target) {
+    //       console.log(event.target)
+    //       window.history.back(-1)
+    //       document.body.style.overflowY='auto'
+    //     }
+      
+    // })
+    window.onclick=function(event){
+      if (overlayRef.current === event.target) {
+        window.history.back(-1)
+        document.body.style.overflowY='auto'
       }
-    });
-    return () => {
-      window.removeEventListener("mousedown", event, true);
-    };
+     
+    }
+    // return () => {
+    //   window.removeEventListener("mousedown", event);
+    //   console.log('xoa')
+    // };
   });
   // xử lý love ảnh
   const handleLove = (docId, love) => {
@@ -51,14 +62,26 @@ function SeePost() {
   const handleFocusInput=()=>{
     commentRef.current.focus()
   }
+  // xử lý dispatch hiển thị hộp adjust-post  
+  const handleShowBoxAdjustPost=()=>{
+    const  data={
+      isShowOverlay:true,
+      docIdToDelete:filterPostsById.docId,
+      userIdOfPost:filterPostsById.userId,
+      docIdToUpdateNumberPosts:filterPostsById.docIdUser,
+      prePostsNumberOfUser:loginUserInforFullData.postsNumber
+     }
+     dispatch(ADJUST_POST(data))
+     document.body.style.overflowY='hidden'
+  }
   return (
     <>
       {filterPostsById ? (
         <>
-          <div className="fixed right-0 top-0 bottom-0 left-0 bg-greyColor mix-blend-multiply z-50"></div>
+          <div className="fixed right-0 top-0 bottom-0 left-0 bg-greyColor mix-blend-multiply z-40"></div>
           <div
             ref={overlayRef}
-            className=" fixed animate-scale top-0 right-0 left-0 bottom-0 flex py-[26px] px-[70px] 2xl:px-[200px] z-50  "
+            className=" fixed animate-scale top-0 right-0 left-0 bottom-0 flex py-[26px] px-[70px] 2xl:px-[200px] z-40  "
           >
             <div className="w-full flex z-50 min-h-[100px] h-auto  ">
               <div className="w-[666px]  bg-blackColor h-full py-20">
@@ -79,16 +102,21 @@ function SeePost() {
               </div>
               <div className="bg-whiteColor rounded-r-md grow">
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-x-4 p-3 border-b border-borderLightColor">
-                    <img
-                      className="w-8 h-8 rounded-full cursor-pointer"
-                      src={filterPostsById.avatar}
-                      alt=""
-                    />
-                    <span className="text-sm font-medium cursor-pointer">
-                      {filterPostsById.userName}
-                    </span>
-                    <span>&bull;</span>
+                  <div className="flex justify-between border-b p-3  border-borderLightColor items-center">
+                     <div className="flex items-center gap-x-4 ">
+                      <img
+                        className="w-8 h-8 rounded-full cursor-pointer"
+                        src={filterPostsById.avatar}
+                        alt=""
+                      />
+                      <span className="text-sm font-medium cursor-pointer">
+                        {filterPostsById.userName}
+                      </span>
+                     </div>
+                     <span onClick={()=>{handleShowBoxAdjustPost()}} className="cursor-pointer"><BsThreeDots/>
+                      
+                     </span>
+                   
                   </div>
                   <div className="flex grow w-full overflow-y-auto ">
                     <div className="w-full">
@@ -245,6 +273,7 @@ function SeePost() {
       ) : (
         ""
       )}
+   
     </>
   );
 }

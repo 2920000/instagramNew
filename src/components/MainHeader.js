@@ -7,14 +7,17 @@ import { HiOutlineSearch, HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { IoPersonCircleSharp, IoCloseCircle } from "react-icons/io5";
 import { MdOutlineBookmarkBorder } from "react-icons/md";
 import { RiSettings3Line } from "react-icons/ri";
+import {BiHomeAlt} from 'react-icons/bi'
 import { getAuth, signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoginUserInfor } from "../features/loginSlice";
 import { SHOW_BOX_CREATE_POST } from "../features/postSlice";
+import {useLocation} from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 function MainHeader() {
   const dispatch = useDispatch();
+  const pathname=useLocation().pathname
   const auth = getAuth();
   const [boxLogOut, setBoxLogOut] = useState(false);
   const [borderAvatar, setBorderAvatar] = useState(false);
@@ -23,7 +26,7 @@ function MainHeader() {
   // Lấy thông tin user đang đăng nhập
   const loginUserInfor = useSelector(selectLoginUserInfor);
   // Xử lý đăng xuất
-  const handleLogOut = () => {
+  const handleLogOut=() => {
     signOut(auth);
   };
   // Xử lý toggle box đăng xuất với animation
@@ -64,6 +67,11 @@ function MainHeader() {
     dispatch(SHOW_BOX_CREATE_POST());
     document.body.style.overflowY = "hidden";
   };
+  const handleOffBoxWhenClick=()=>{
+    setBoxLogOut(false);
+    setBorderAvatar(false);
+
+  }
   return (
     <>
       <div className="h-[60px] border-b border-borderColor fixed  w-full z-20  bg-whiteColor ">
@@ -88,7 +96,7 @@ function MainHeader() {
           </div>
           <div className="w-full justify-end flex grow basis-[127px] ">
             <div className="flex space-x-6 text-2xl items-center pl-5 ">
-              <Link to='/'><AiFillHome className="cursor-pointer" /></Link>
+              <Link to='/'>{pathname==='/'?<AiFillHome  className="cursor-pointer text-[27px] " />:<><BiHomeAlt  className="cursor-pointer text-[27px]  " /></>}</Link>
               <FiSend className="cursor-no-drop" />
               <BiMessageSquareAdd
                 onClick={handleShowBoxCreatePost}
@@ -108,7 +116,7 @@ function MainHeader() {
                 <img
                   onClick={handleToggleBoxLogOut}
                   id="avatar"
-                  className="w-6 h-6 rounded-full cursor-pointer border border-solid border-greyColor"
+                  className="w-6 h-6 rounded-full  cursor-pointer  outline  outline-1  outline-greyColor"
                   src={loginUserInfor.avatar}
                   alt=""
                 />
@@ -117,7 +125,7 @@ function MainHeader() {
                     ref={logOutBoxRef}
                     className="box  absolute right-[15px] transition-all duration-100   translate-y-3 opacity-100 w-[230px] rounded h-4xl list-none bg-whiteColor  shadow-[0px_0px_3px_grey] "
                   >
-                    <Link to={`${loginUserInfor.userId}`}><li className="py-2 pl-4 flex items-center gap-x-3 text-sm hover:bg-greyLightColor cursor-pointer">
+                    <Link to={`${loginUserInfor.userId}`}><li onClick={handleOffBoxWhenClick} className="py-2 pl-4 flex items-center gap-x-3 text-sm hover:bg-greyLightColor cursor-pointer">
                       <IoPersonCircleSharp className="text-lg " />
                       Trang cá nhân
                     </li></Link>

@@ -14,7 +14,7 @@ function PersonalPosts() {
     {post.type==='image'
     ?<div><img  className='w-full  h-[300px]   object-cover' src={post.pictureOrVideoOfPost}  alt='' /></div>
     :<div>
-      <video controls>
+      <video controls className='h-[300px] w-full'>
         <source src={post.pictureOrVideoOfPost} type='video/mp4' />
       </video>
     </div>}

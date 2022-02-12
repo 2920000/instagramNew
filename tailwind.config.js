@@ -60,7 +60,9 @@ module.exports = {
         'bg-lightWhite':'#fafafa',
         'overlayColor':'rgba(37,37,37,1)',
         'textFollowColor':'#0095F6',
-         'borderLightColor':'#f2f2f2'
+         'borderLightColor':'#f2f2f2',
+        'overlayLightColor':'#000000A6',
+
     },
   },
   plugins: [],

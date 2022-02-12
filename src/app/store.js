@@ -1,4 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit'
+import chatSlice from '../features/chatSlice'
 import followSlice from '../features/followSlice'
 import loginSlice from '../features/loginSlice'
 import postSlice from '../features/postSlice'
@@ -11,7 +12,8 @@ export const store=configureStore({
         users:usersSilce,
         post:postSlice,
         posts:postsSlice,
-        follow:followSlice
+        follow:followSlice,
+        chat:chatSlice
     },
     middleware:getDefaultMiddleware=>(
         getDefaultMiddleware({

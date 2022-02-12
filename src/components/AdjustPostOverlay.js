@@ -13,13 +13,13 @@ function AdjustPostOverlay() {
     const logginUserInfor=useSelector(selectLoginUserInfor)
     // xử lý click outside
     useEffect(()=>{
+      if(isAjustPost.isShowOverlay) document.body.style.overflowY='hidden'
+            else document.body.style.overflowY='auto'
       const event=  window.addEventListener('mousedown',event=>{
            if(event.target===adjustPostBoxRef.current){
              dispatch(ADJUST_POST({
                isShowOverlay:false,
              }))
-             document.body.style.overflowY='auto'
-          
            }
         })
       return ()=>{
@@ -42,7 +42,6 @@ function AdjustPostOverlay() {
       dispatch(ADJUST_POST({
         isShowOverlay:false,
       }))
-      document.body.style.overflowY='auto'
     }
   return (
    <>{isAjustPost.isShowOverlay&&<div>
@@ -53,6 +52,7 @@ function AdjustPostOverlay() {
                   {logginUserInfor.userId===isAjustPost.userIdOfPost?  
                   <li onClick={handleDeletePost} className="py-3.5 text-center text-sm font-bold cursor-pointer border-b border-borderColor text-[#ED4956] active:bg-greyLightColor rounded-xl">Xóa</li>
                   :<li className="py-3.5 text-center text-sm font-bold cursor-pointer border-b border-borderColor text-[#ED4956] active:bg-greyLightColor rounded-t-xl">Báo cáo</li>}
+                   
                     <li className="py-3.5 text-center text-sm border-b cursor-pointer border-borderColor active:bg-greyLightColor">Đi tới bài viết</li>
                     <li className="py-3.5 text-center text-sm border-b cursor-pointer border-borderColor active:bg-greyLightColor">Chia sẻ lên...</li>
                     <li className="py-3.5 text-center text-sm border-b cursor-pointer border-borderColor active:bg-greyLightColor">Sao chép liên kết</li>

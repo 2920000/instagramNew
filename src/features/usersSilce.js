@@ -1,6 +1,6 @@
 import { async } from '@firebase/util'
 import {createSlice} from '@reduxjs/toolkit'
-import {collection, onSnapshot,updateDoc,doc} from 'firebase/firestore'
+import {collection, onSnapshot,updateDoc,doc,getDocs} from 'firebase/firestore'
 import { db } from '../configFirebase'
 
 export const getUsersFromFirebase=(loginUserId)=>async(dispatch)=>{
@@ -13,7 +13,16 @@ export const getUsersFromFirebase=(loginUserId)=>async(dispatch)=>{
        const getUsersExceptLoginUser=allUsers.filter(user=>user.userId!==loginUserId)
        dispatch(GET_USERS_EXCEPT_LOGIN_USER(getUsersExceptLoginUser))
    })
-}
+
+   //
+//    const querySnapshot= await getDocs(collection(db,'users'))
+//    const allUsers= querySnapshot.docs.map(doc=>({...doc.data(),docId:doc.id}))
+//    dispatch(GET_ALL_USERS(allUsers))
+//    const getLoginUserFullData=allUsers.find(user=>user.userId===loginUserId)
+//    dispatch(GET_LOGIN_USER_FULL_DATA(getLoginUserFullData))
+//    const getUsersExceptLoginUser=allUsers.filter(user=>user.userId!==loginUserId)
+//    dispatch(GET_USERS_EXCEPT_LOGIN_USER(getUsersExceptLoginUser))
+ }
 
 const initialState={
     allUsers:[],
@@ -50,7 +59,6 @@ export const actionUpdateFollow=(loginUserFullData,userClickedToFollow)=>async()
 
  // kiểm tram xem user muốn follow tồn tại trong mảng following chưa , có thì xóa , không có thì add
 const checkFollow=loginUserFullData.following.every(user=>user.userId!==userClickedToFollow.userId)
- console.log('render')  
  if(checkFollow){
        // update following của user đang đăng nhập
     updateDoc(doc(db,'users',loginUserFullData.docId),{

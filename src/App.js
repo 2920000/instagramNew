@@ -1,6 +1,6 @@
 import './App.css';
 import React,{memo} from 'react';
-import {useDispatch,useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import Login from './components/Login';
 import MainPage from './components/MainPage';
 import {AiOutlineInstagram} from 'react-icons/ai'
@@ -12,18 +12,14 @@ import { getPostsFromFirebase } from './features/postsSlice';
 function App() {
   const [x,setX]=useState(null)
 const [y,setY]=useState(null)
-  const [user,setUser]=useState()
   const dispatch=useDispatch()
   const auth= getAuth()
   // khi load lại trang , lấy dữ liệu từ firebase đổ vào store để dùng
-   
-  
-
+ 
   useEffect(()=>{
    onAuthStateChanged(auth,user=>{
     if(user){
        // khi tồn tại user dispatch mọi dự liệu cần thiết để sử dụng toàn cục
-        setUser(user)
         dispatch(getUsersFromFirebase(user.uid))
         dispatch(getPostsFromFirebase())
       // một số thông tin cần thiết của user đang đăng nhập
@@ -38,12 +34,11 @@ const [y,setY]=useState(null)
     }
     else
       {
-        setUser('') 
         setY(true) 
         setX(false)
       }
   })
-})
+},[])
  
  return <>
     {x===null&&y===null?<div className='h-screen flex items-center justify-center'><AiOutlineInstagram className=' text-greyColor text-6xl' /></div>:''}

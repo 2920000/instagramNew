@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,memo } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
 import { FiSend, FiBookmark } from "react-icons/fi";
@@ -11,7 +11,6 @@ import { selectLoginUserInfor } from "../features/loginSlice";
 import { actionHandleLoved } from "../features/postsSlice";
 import { actionHandleSubmitComment } from "../features/postsSlice";
 import { actionHandleSavePost } from "../features/postsSlice";
-import { selectAllUsers } from "../features/usersSilce";
 import { ADJUST_POST } from "../features/postsSlice";
 import { selectLoginUserFullData } from "../features/usersSilce";
 import moment from "moment";
@@ -20,7 +19,6 @@ function Posts() {
   const navigate = useNavigate();
   // Lấy ra những posts có trong firebase
   const posts = useSelector(selectAllPosts);
-  const allUsers=useSelector(selectAllUsers)
   // lấy thông tin user đang đăng nhập
   const loginUserInfor = useSelector(selectLoginUserInfor);
   //
@@ -66,32 +64,56 @@ function Posts() {
 
      }
      dispatch(ADJUST_POST(data))
-     document.body.style.overflowY='hidden'
    }
-  
+   
+ // lọc post những ai đã theo dõi và chưa theo dõi
+  const filterPostsArray=posts.map(post=>{
+    const followingUser=loginUserInforFullData.following
+    const lengthOfFollowing=followingUser.length
+     for(let i=0;i<lengthOfFollowing;i++){
+         if(followingUser[i].userId===post.userId){
+           return  post
+         }
+     }
+  })
+  const findPosts=filterPostsArray.filter(post=>post!==undefined)
+ //
+ const handleThrowLove=()=>{
+   
+ } 
+ 
   return (
     <div>
       {posts.length > 0 ? (
         <div>
-          {posts.map((post) => (
+          {findPosts.map((post) => (
             <div
               key={post.postId}
               className="my-5 border border-borderColor rounded"
             >
               <div className="flex p-3 justify-between " >
-               <Link to={`${post.userId}`} >
                <div className="flex gap-x-4 items-center  ">
+                <Link to={`${post.userId}`} className="flex gap-x-4 items-center  " >
                   <img
                     className="w-8 h-8 rounded-full"
                     src={post.avatar}
                     alt=""
                   />
                   <span className="text-sm font-medium">{post.userName}</span>
+                  </Link>
+                  {post.userId!==loginUserInfor.userId
+                  ?<div>
+                    {loginUserInforFullData.following.every(followingUserId=>followingUserId.userId!==post.userId)
+                  &&<span className="font-medium text-textFollowColor text-sm">Theo dõi</span>
+                  }
+                  </div>
+                  :<></>
+                  }
                 </div>
-               </Link>
+              
                 <div onClick={()=>{handleShowBoxAdjustPost(post.docId,post.userId,post.docIdUser)}} className="font-medium cursor-pointer text-xl"><BsThreeDots/></div>
               </div>
-              <div>
+              <div onClick={()=>{handleThrowLove()}}>
                 {post.type === "image" ? (
                   <img
                     className=" object-fill w-full"
@@ -227,4 +249,4 @@ function Posts() {
   );
 }
 
-export default Posts;
+export default memo(Posts);

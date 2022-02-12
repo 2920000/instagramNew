@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo,Suspense,lazy } from "react";
 import MainHeader from "./MainHeader";
 import MainBody from "./MainBody";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -10,7 +10,13 @@ import PersonalSaved from "./PersonalSaved";
 import PersonalTagged from "./PersonalTagged";
 import AdjustPostOverlay from "./AdjustPostOverlay";
 import UnFollowBoxWithOverlay from "./UnFollowBoxWithOverlay";
+import AllUserSuggested from "./AllUserSuggested";
+import SeeFollowing from "./SeeFollowing";
+import ChatBox from "./ChatBox";
+import MessagesById from "./MessagesById";
+
 function MainPage() {
+
   return (
     <div>
       <Router>
@@ -25,7 +31,11 @@ function MainPage() {
               <Route path="" element={<PersonalPosts/>} />
               <Route path="saved" element={<PersonalSaved/>} />
               <Route path="tagged" element={<PersonalTagged/>} />
-
+          </Route>
+          
+          <Route path="explore/people" element={<AllUserSuggested/>}  />
+          <Route path="chat/:userId/"  element={<ChatBox/>} >
+              <Route path=":messagesId"  element={<MessagesById/>} />
           </Route>
         </Routes>
       </Router>

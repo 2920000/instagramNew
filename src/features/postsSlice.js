@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { collection, onSnapshot, orderBy, query,updateDoc,doc ,deleteDoc} from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query,updateDoc,doc ,deleteDoc,getDocs} from 'firebase/firestore'
 import { db } from '../configFirebase'
 import { v4 as uuid } from "uuid";
 import moment from "moment";
@@ -40,6 +40,10 @@ export const getPostsFromFirebase=()=>async(dispatch)=>{
         const allPosts=postsDocs.docs.map(doc=>({...doc.data(),docId:doc.id}))
         dispatch(GET_ALL_POSTS(allPosts))
     })
+  //  const querySnapshot= await getDocs(collection(db,'posts'))
+  //  const allPosts=querySnapshot.docs.map(doc=>({...doc.data(),docId:doc.id}))
+  //  dispatch(GET_ALL_POSTS(allPosts))
+
 }
 // xử lý love bài viết
 export const actionHandleLoved=(docId, love,loginUserInfor)=>async(dispatch)=>{

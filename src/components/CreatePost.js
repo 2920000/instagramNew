@@ -29,12 +29,13 @@ function CreatePost() {
   );
   // xử lý click ra ngoài phần tử sẽ qua trở về trang chính
   useEffect(() => {
+          if(isShow) document.body.style.overflowY='hidden'
     window.onclick = function (event) {
       if (overlayRef.current) {
         if (overlayRef.current === event.target) {
           dispatch(OFF_BOX_CREATE_POST());
           setLinkPreview('')
-          document.body.style.overflowY = "auto";
+          document.body.style.overflowY='auto'
         }
       }
     };
@@ -77,7 +78,6 @@ function CreatePost() {
       )
     );
   dispatch(OFF_BOX_CREATE_POST())
-  document.body.style.overflowY = "auto";
   setInput('')
   };
   return (

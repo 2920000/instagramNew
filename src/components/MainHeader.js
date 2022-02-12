@@ -14,6 +14,7 @@ import { selectLoginUserInfor } from "../features/loginSlice";
 import { SHOW_BOX_CREATE_POST } from "../features/postSlice";
 import {useLocation} from 'react-router-dom'
 import { Link } from "react-router-dom";
+import SearchUser from "./SearchUser";
 
 function MainHeader() {
   const dispatch = useDispatch();
@@ -21,8 +22,11 @@ function MainHeader() {
   const auth = getAuth();
   const [boxLogOut, setBoxLogOut] = useState(false);
   const [borderAvatar, setBorderAvatar] = useState(false);
+  const [input,setInput]=useState('')
+  const [searchBox,setSearchBox]=useState(false)
+  const [closeIcon,setCloseIcon]=useState(false)
   const logOutBoxRef = useRef();
-
+  const searchBoxRef=useRef()
   // Lấy thông tin user đang đăng nhập
   const loginUserInfor = useSelector(selectLoginUserInfor);
   // Xử lý đăng xuất
@@ -72,6 +76,15 @@ function MainHeader() {
     setBorderAvatar(false);
 
   }
+  const handeShowSearchBox=()=>{
+    setSearchBox(true)
+    setCloseIcon(true)
+  }
+  const handleCloseSearchBoxByIcon=()=>{
+    setSearchBox(false)
+    setCloseIcon(false)
+    setInput('')
+  }
   return (
     <>
       <div className="h-[60px] border-b border-borderColor fixed  w-full z-20  bg-whiteColor ">
@@ -83,15 +96,17 @@ function MainHeader() {
             /></Link>
           </div>
           <div className="  hidden sm:block  ">
-            <div className="flex grow items-center relative px-10 py-1 bg-greyLightColor rounded-md  ">
+            <div ref={searchBoxRef} className="flex grow items-center relative px-10 py-1 bg-greyLightColor rounded-md  ">
               <HiOutlineSearch className="absolute left-3 text-lg text-greyColor " />
               <input
-                className=" w-full border-none outline-none h-7 rounded-md bg-greyLightColor font-light "
+                 onClick={handeShowSearchBox} value={input} onChange={(e)=>{setInput(e.target.value)}} 
+                className=" w-full border-none outline-none h-7  rounded-md bg-greyLightColor font-light "
                 placeholder="Tìm kiếm"
               />
-              {
-                <IoCloseCircle className="text-greyColor text-lg absolute right-3" />
+              {closeIcon&&
+                <IoCloseCircle onClick={handleCloseSearchBoxByIcon} className="text-greyColor cursor-pointer text-lg absolute right-3" />
               }
+              <SearchUser input={input} setInput={setInput} searchBoxstatus={searchBox} setSearchBox={setSearchBox} searchBoxRef={searchBoxRef} setCloseIcon={setCloseIcon} />
             </div>
           </div>
           <div className="w-full justify-end flex grow basis-[127px] ">

@@ -27,26 +27,15 @@ function SeePost() {
   // handle Click ra ngoài phần tử
   // mai sửa lại
   useEffect(() => {
-    document.body.style.overflowY='hidden'
-    // const event = window.addEventListener("mousedown", (event) => {
-    //     if (overlayRef.current === event.target) {
-    //       console.log(event.target)
-    //       window.history.back(-1)
-    //       document.body.style.overflowY='auto'
-    //     }
-      
-    // })
+    if(filterPostsById) document.body.style.overflowY='hidden'
+    else document.body.style.overflowY='auto'
     window.onclick=function(event){
       if (overlayRef.current === event.target) {
         window.history.back(-1)
-        document.body.style.overflowY='auto'
+        
       }
      
     }
-    // return () => {
-    //   window.removeEventListener("mousedown", event);
-    //   console.log('xoa')
-    // };
   });
   // xử lý love ảnh
   const handleLove = (docId, love) => {
@@ -72,7 +61,6 @@ function SeePost() {
       prePostsNumberOfUser:loginUserInforFullData.postsNumber
      }
      dispatch(ADJUST_POST(data))
-     document.body.style.overflowY='hidden'
   }
   return (
     <>

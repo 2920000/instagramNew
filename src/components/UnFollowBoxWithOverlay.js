@@ -8,8 +8,9 @@ function UnFollowBoxWithOverlay() {
     const overlayRef=useRef()
     const unFollowBox=useSelector(selectUnfollow)
     
-    
     useEffect(()=>{
+         if(unFollowBox.isShow) document.body.style.overflowY='hidden'
+            else document.body.style.overflowY='auto'
         const event=window.addEventListener('mousedown',event=>{
                    if(event.target===overlayRef.current){
                        dispatch(UNFOLLOW_BOX({

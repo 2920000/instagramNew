@@ -74,19 +74,23 @@ function Posts() {
          if(followingUser[i].userId===post.userId){
            return  post
          }
+        
      }
   })
+  // kết hợp posts của user đã theo dõi và user đang dùng ứng dụng
+  const filterPostsOfUserArray=posts.filter(post=>post.userId===loginUserInforFullData.userId)
   const findPosts=filterPostsArray.filter(post=>post!==undefined)
+  const connectArray=filterPostsOfUserArray.concat(findPosts)
+
  //
  const handleThrowLove=()=>{
    
  } 
- 
   return (
-    <div>
+    <div className=" ">
       {posts.length > 0 ? (
         <div>
-          {findPosts.map((post) => (
+          {connectArray.map((post) => (
             <div
               key={post.postId}
               className="my-5 border border-borderColor rounded"

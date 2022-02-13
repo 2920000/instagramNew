@@ -1,17 +1,19 @@
 import {createSlice,createAsyncThunk} from '@reduxjs/toolkit'
 import { db } from '../configFirebase'
-import {signInWithPopup,getAuth,FacebookAuthProvider} from 'firebase/auth'
+import {signInWithPopup,getAuth,FacebookAuthProvider,GoogleAuthProvider, signInAnonymously} from 'firebase/auth'
 import {addDoc,collection,onSnapshot} from 'firebase/firestore'
-import {useSelector} from 'react-redux'
+
 
 const auth=getAuth()
-const provider= new FacebookAuthProvider()
+// const provider= new FacebookAuthProvider()
+const provider= new GoogleAuthProvider()
 
 
 export const getUserInfor=createAsyncThunk(
     'login/userInfo',
     async()=>{
         const logInInfor = await signInWithPopup(auth,provider)
+        // const GooglelogInInfor= await signInWithPopup(auth,googleProvider)
         const userInfor=logInInfor.user
         console.log(userInfor)
         
@@ -30,6 +32,8 @@ export const getUserInfor=createAsyncThunk(
                     followers:[],
                     following:[],
                     isReady:false,
+                    chatBoxes:[],
+                    postsSaved:[]
                 
                 })
               }

@@ -8,6 +8,7 @@ function ChatBox() {
     const url=useLocation().pathname
     const subLink=`/chat/${userId}/`
     const loginUserFullData=useSelector(selectLoginUserFullData)
+    
    if(loginUserFullData.chatBoxes){
     return <div className='mt-12'>
     <div className='max-w-[940px] m-auto h-[620px] rounded flex border border-borderColor  '>

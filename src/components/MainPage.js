@@ -14,6 +14,7 @@ import AllUserSuggested from "./AllUserSuggested";
 import SeeFollowing from "./SeeFollowing";
 import ChatBox from "./ChatBox";
 import MessagesById from "./MessagesById";
+import Explore from "./Explore";
 
 function MainPage() {
 
@@ -37,6 +38,7 @@ function MainPage() {
           <Route path="chat/:userId/"  element={<ChatBox/>} >
               <Route path=":messagesId"  element={<MessagesById/>} />
           </Route>
+          <Route path="/explore/" element={<Explore/>}/>
         </Routes>
       </Router>
     </div>

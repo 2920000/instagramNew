@@ -3,8 +3,8 @@ import React from 'react'
 function Footer() {
   return (
     <footer>
-    <div className='flex flex-col space-y-5 items-center py-16'>
-            <div className='flex space-x-5 text-[#8e8e8e] text-xs'>
+    <div className='flex flex-col space-y-5 items-center py-16 '>
+            <div className='flex space-x-5 gap-y-2 justify-center text-[#8e8e8e] text-xs flex-wrap'>
               <span>Meta</span>
               <span>Giới thiệu</span>
               <span>Blog</span>

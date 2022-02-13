@@ -69,18 +69,18 @@ function SeePost() {
           <div className="fixed right-0 top-0 bottom-0 left-0 bg-greyColor mix-blend-multiply z-40"></div>
           <div
             ref={overlayRef}
-            className=" fixed animate-scale top-0 right-0 left-0 bottom-0 flex py-[26px] px-[70px] 2xl:px-[200px] z-40  "
+            className=" fixed animate-scale top-0 right-0 left-0 bottom-0 flex justify-center items-center py-[26px] px-[70px] 2xl:px-[200px] z-40  "
           >
-            <div className="w-full flex z-50 min-h-[100px] h-auto  ">
-              <div className="w-[666px]  bg-blackColor h-full py-20">
+            <div className="w-full flex justify-center  z-50 min-h-[100px] ">
+              <div className="max-w-[1379px] rounded-xl md:rounded-none max-h-[666px] grow bg-blackColor  py-20">
                 {filterPostsById.type === "image" ? (
                   <img
                     src={filterPostsById.pictureOrVideoOfPost}
                     alt=""
-                    className="object-cover w-full  h-full"
+                    className="object-cover w-full   h-full aspect-square  "
                   />
                 ) : (
-                  <video className="w-[99.9%] h-full" controls>
+                  <video className="w-[99.9%]  h-full" controls>
                     <source
                       src={filterPostsById.pictureOrVideoOfPost}
                       type="video/mp4"
@@ -88,10 +88,10 @@ function SeePost() {
                   </video>
                 )}
               </div>
-              <div className="bg-whiteColor rounded-r-md grow">
+              <div className="bg-whiteColor hidden md:block  rounded-r-md min-w-[420px] max-w-[500px] grow">
                 <div className="flex flex-col h-full">
-                  <div className="flex justify-between border-b p-3  border-borderLightColor items-center">
-                     <div className="flex items-center gap-x-4 ">
+                  <div className="flex   justify-between border-b p-3  border-borderLightColor items-center">
+                     <div className="flex  items-center gap-x-4 ">
                       <img
                         className="w-8 h-8 rounded-full cursor-pointer"
                         src={filterPostsById.avatar}

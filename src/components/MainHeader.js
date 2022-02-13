@@ -112,12 +112,12 @@ function MainHeader() {
           <div className="w-full justify-end flex grow basis-[127px] ">
             <div className="flex space-x-6 text-2xl items-center pl-5 ">
               <Link to='/'>{pathname==='/'?<AiFillHome  className="cursor-pointer text-[27px] " />:<><BiHomeAlt  className="cursor-pointer text-[27px]  " /></>}</Link>
-              <FiSend className="cursor-no-drop" />
+              <Link to={`chat/${loginUserInfor.userId}`} ><FiSend className="cursor-pointer" /></Link>
               <BiMessageSquareAdd
                 onClick={handleShowBoxCreatePost}
                 className="cursor-pointer"
               />
-              <ImCompass2 className="cursor-no-drop" />
+              <Link to='/explore/'><ImCompass2 className="cursor-pointer" /></Link>
               <AiOutlineHeart className="text-[28px] cursor-no-drop" />
 
               <div className="">

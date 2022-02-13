@@ -9,7 +9,6 @@ function PersonalSaved() {
   const filterPostsSavedById = allUsers.find(
     (user) => user.userId === userId
   ).postsSaved;
-
   return (
     <>
       {filterPostsSavedById.length > 0 ? (

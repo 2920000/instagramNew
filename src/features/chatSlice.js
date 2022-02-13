@@ -21,12 +21,11 @@ export default chatSlice.reducer
 export const selectBoxId=state=>state.chat.boxId
 export const {GET_BOXID} =chatSlice.actions
 
-export const actionNavigateToChatBox=(loginUserFullData,filterUserById)=>async(dispatch)=>{
+export const actionNavigateToChatBox=(loginUserFullData,filterUserById,navigate)=>async(dispatch)=>{
     // console.log(loginUserFullData)
     // console.log(filterUserById)
 
 const checkBoxIdExist=loginUserFullData.chatBoxes.every(chatBox=>chatBox.userId!==filterUserById.userId)
-
 if(checkBoxIdExist){
     const newBoxId=uuid()
 addDoc(collection(db,'chatBoxes'),{
@@ -62,6 +61,9 @@ updateDoc(doc(db,'users',filterUserById.docId),{
     }]
 })
 dispatch(GET_BOXID(newBoxId))
+
+    navigate(`/chat/${loginUserFullData.userId}/${newBoxId}`)
+  
 }
 else{
     const findBoxIdExist=loginUserFullData.chatBoxes.find(chatBox=>chatBox.userId===filterUserById.userId).boxId

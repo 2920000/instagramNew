@@ -26,7 +26,7 @@ function SearchUser({input,searchBoxstatus,setSearchBox,searchBoxRef,setCloseIco
    })
    useEffect(()=>{
      const event= window.addEventListener('mousedown',event=>{
-       if(searchBoxRef){
+       if(searchBoxRef.current){
         if(!searchBoxRef.current.contains(event.target)){
           setSearchBox(false)
           setCloseIcon(false)

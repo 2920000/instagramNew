@@ -1,4 +1,4 @@
-import React, { memo,Suspense,lazy } from "react";
+import React, { memo, Suspense, lazy } from "react";
 import MainHeader from "./MainHeader";
 import MainBody from "./MainBody";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -17,28 +17,27 @@ import MessagesById from "./MessagesById";
 import Explore from "./Explore";
 
 function MainPage() {
-
   return (
     <div>
       <Router>
-      <CreatePost />
-       <AdjustPostOverlay/>
-       <UnFollowBoxWithOverlay/>
+        <CreatePost />
+        <AdjustPostOverlay />
+        <UnFollowBoxWithOverlay />
         <MainHeader />
         <Routes>
           <Route path="/" element={<MainBody />} />
           <Route path="/post/:postId" element={<SeePost />} />
           <Route path="/:userId/" element={<UserInfor />}>
-              <Route path="" element={<PersonalPosts/>} />
-              <Route path="saved" element={<PersonalSaved/>} />
-              <Route path="tagged" element={<PersonalTagged/>} />
+            <Route path="" element={<PersonalPosts />} />
+            <Route path="saved" element={<PersonalSaved />} />
+            <Route path="tagged" element={<PersonalTagged />} />
           </Route>
-          
-          <Route path="explore/people" element={<AllUserSuggested/>}  />
-          <Route path="chat/:userId/"  element={<ChatBox/>} >
-              <Route path=":messagesId"  element={<MessagesById/>} />
+
+          <Route path="explore/people" element={<AllUserSuggested />} />
+          <Route path="chat/:userId/" element={<ChatBox />}>
+            <Route path=":messagesId" element={<MessagesById />} />
           </Route>
-          <Route path="/explore/" element={<Explore/>}/>
+          <Route path="/explore/" element={<Explore />} />
         </Routes>
       </Router>
     </div>

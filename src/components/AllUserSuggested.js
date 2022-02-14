@@ -5,7 +5,7 @@ import { selectAllUserExceptLoginUser } from "../features/usersSilce";
 import { selectLoginUserFullData } from "../features/usersSilce";
 function AllUserSuggested() {
   const allUserExceptLoginUser = useSelector(selectAllUserExceptLoginUser);
-  const loginUserFullData=useSelector(selectLoginUserFullData)
+  const loginUserFullData = useSelector(selectLoginUserFullData);
   if (allUserExceptLoginUser) {
     // docId  user đang đăng nập
     return (
@@ -18,7 +18,10 @@ function AllUserSuggested() {
                 className="flex items-center justify-between px-3 py-2"
                 key={user.userId}
               >
-                <div className="flex items-center gap-x-2">
+                <Link
+                  to={`/${user.userId}`}
+                  className="flex items-center gap-x-2"
+                >
                   <div>
                     <img
                       className="w-10 h-10 cursor-pointer rounded-full"
@@ -29,10 +32,12 @@ function AllUserSuggested() {
                   <span className="text-sm cursor-pointer font-medium">
                     {user.userName}
                   </span>
-                </div>
+                </Link>
 
                 <div>
-                  {loginUserFullData.following.every(followingUser=>followingUser.userId!==user.userId) ? (
+                  {loginUserFullData.following.every(
+                    (followingUser) => followingUser.userId !== user.userId
+                  ) ? (
                     <span className="rounded py-1.5 px-3  bg-[#0095f6] text-sm font-medium cursor-pointer text-whiteColor">
                       Theo dõi
                     </span>

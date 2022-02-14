@@ -3,21 +3,21 @@ import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAllUsers } from "../features/usersSilce";
 import { GrClose } from "react-icons/gr";
-import { selectFollowingBoxStatus } from "../features/followSlice";
-import { SEE_FOLLOWING } from "../features/followSlice";
-function SeeFollowing() {
+import { selectFollowersBoxStatus } from "../features/followSlice";
+import { SEE_FOLLOWERS } from "../features/followSlice";
+function SeeFollowers() {
   const dispatch = useDispatch();
   const allUsers = useSelector(selectAllUsers);
-  const followingBoxStatus = useSelector(selectFollowingBoxStatus);
+  const followersBoxStatus = useSelector(selectFollowersBoxStatus);
   const url = useLocation().pathname;
   const filterUserById = allUsers.find((user) => `/${user.userId}` === url);
   const moduleRef = useRef();
   useEffect(() => {
-    if (followingBoxStatus) document.body.style.overflowY = "hidden";
+    if (followersBoxStatus) document.body.style.overflowY = "hidden";
     else document.body.style.overflowY = "auto";
     const event = window.addEventListener("mousedown", (event) => {
       if (event.target === moduleRef.current) {
-        dispatch(SEE_FOLLOWING(false));
+        dispatch(SEE_FOLLOWERS(false));
       }
     });
     return () => {
@@ -25,13 +25,13 @@ function SeeFollowing() {
     };
   });
   const handleOffBox = () => {
-    dispatch(SEE_FOLLOWING(false));
+    dispatch(SEE_FOLLOWERS(false));
   };
   return (
     <>
       {filterUserById ? (
         <>
-          {followingBoxStatus && (
+          {followersBoxStatus && (
             <div>
               <div className="fixed top-0 right-0 left-0 bottom-0 bg-overlayLightColor  mix-blend-multiply z-40 "></div>
               <div
@@ -40,7 +40,8 @@ function SeeFollowing() {
               >
                 <div className="w-[400px] h-[380px] bg-whiteColor flex flex-col rounded-xl">
                   <p className="py-2 text-center border-b border-borderColor relative font-medium ">
-                    Đang theo dõi{" "}
+                    {" "}
+                    Người theo dõi{" "}
                     <span
                       onClick={handleOffBox}
                       className="absolute right-[12px] text-2xl cursor-pointer "
@@ -49,7 +50,7 @@ function SeeFollowing() {
                     </span>
                   </p>
                   <div className="flex grow overflow-y-auto flex-col ">
-                    {filterUserById.following.map((user) => (
+                    {filterUserById.followers.map((user) => (
                       <div
                         className="flex justify-between py-2 px-3 "
                         key={user.userId}
@@ -65,7 +66,7 @@ function SeeFollowing() {
                           </span>
                         </div>
                         <div className="text-sm cursor-pointer font-medium py-1 px-2 rounded border border-borderColor">
-                          Đang theo dõi
+                          Xóa
                         </div>
                       </div>
                     ))}
@@ -82,4 +83,4 @@ function SeeFollowing() {
   );
 }
 
-export default SeeFollowing;
+export default SeeFollowers;

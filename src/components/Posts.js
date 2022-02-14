@@ -1,9 +1,9 @@
-import React, { useEffect, useState,memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
 import { FiSend, FiBookmark } from "react-icons/fi";
 import { CgSmile } from "react-icons/cg";
-import {BsFillBookmarkFill,BsThreeDots} from 'react-icons/bs'
+import { BsFillBookmarkFill, BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { selectAllPosts } from "../features/postsSlice";
@@ -22,7 +22,7 @@ function Posts() {
   // lấy thông tin user đang đăng nhập
   const loginUserInfor = useSelector(selectLoginUserInfor);
   //
-  const loginUserInforFullData=useSelector(selectLoginUserFullData)
+  const loginUserInforFullData = useSelector(selectLoginUserFullData);
   const [message, setMessage] = useState("");
   // xử lý  xem user đã thả tim hay chưa,nếu thả tim rồi sẽ xóa đi,còn chưa thả tim sẽ được thêm vào
   const handleLove = (docId, love) => {
@@ -51,73 +51,94 @@ function Posts() {
     }
     sessionStorage.removeItem("positionOfScrollBody");
   });
- 
- 
-  // xử lý dispatch hiển thị hộp adjust-post  
-   const handleShowBoxAdjustPost=(docIdOfPost,userIdOfPost,docIdUser)=>{
-     const  data={
-      isShowOverlay:true,
-      docIdToDelete:docIdOfPost,
-      userIdOfPost:userIdOfPost,
-      docIdToUpdateNumberPosts:docIdUser,
-      prePostsNumberOfUser:loginUserInforFullData.postsNumber
 
-     }
-     dispatch(ADJUST_POST(data))
-   }
-   
- // lọc post những ai đã theo dõi và chưa theo dõi
-  const filterPostsArray=posts.map(post=>{
-    const followingUser=loginUserInforFullData.following
-    const lengthOfFollowing=followingUser.length
-     for(let i=0;i<lengthOfFollowing;i++){
-         if(followingUser[i].userId===post.userId){
-           return  post
-         }
-        
-     }
-  })
+  // xử lý dispatch hiển thị hộp adjust-post
+  const handleShowBoxAdjustPost = (docIdOfPost, userIdOfPost, docIdUser) => {
+    const data = {
+      isShowOverlay: true,
+      docIdToDelete: docIdOfPost,
+      userIdOfPost: userIdOfPost,
+      docIdToUpdateNumberPosts: docIdUser,
+      prePostsNumberOfUser: loginUserInforFullData.postsNumber,
+    };
+    dispatch(ADJUST_POST(data));
+  };
+
+  // lọc post những ai đã theo dõi và chưa theo dõi
+  const filterPostsArray = posts.map((post) => {
+    const followingUser = loginUserInforFullData.following;
+    const lengthOfFollowing = followingUser.length;
+    for (let i = 0; i < lengthOfFollowing; i++) {
+      if (followingUser[i].userId === post.userId) {
+        return post;
+      }
+    }
+  });
   // kết hợp posts của user đã theo dõi và user đang dùng ứng dụng
-  const filterPostsOfUserArray=posts.filter(post=>post.userId===loginUserInforFullData.userId)
-  const findPosts=filterPostsArray.filter(post=>post!==undefined)
-  const connectArray=filterPostsOfUserArray.concat(findPosts)
+  const filterPostsOfUserArray = posts.filter(
+    (post) => post.userId === loginUserInforFullData.userId
+  );
+  const findPosts = filterPostsArray.filter((post) => post !== undefined);
+  const connectArray = filterPostsOfUserArray.concat(findPosts);
 
- //
- const handleThrowLove=()=>{
-   
- } 
+  //
+  const handleThrowLove = () => {};
   return (
     <div className=" ">
-      {posts.length > 0 ? (
+      {connectArray.length > 0 ? (
         <div>
           {connectArray.map((post) => (
             <div
               key={post.postId}
               className="my-5 border border-borderColor rounded"
             >
-              <div className="flex p-3 justify-between " >
-               <div className="flex gap-x-4 items-center  ">
-                <Link to={`${post.userId}`} className="flex gap-x-4 items-center  " >
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={post.avatar}
-                    alt=""
-                  />
-                  <span className="text-sm font-medium">{post.userName}</span>
+              <div className="flex p-3 justify-between ">
+                <div className="flex gap-x-4 items-center  ">
+                  <Link
+                    to={`${post.userId}`}
+                    className="flex gap-x-4 items-center  "
+                  >
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src={post.avatar}
+                      alt=""
+                    />
+                    <span className="text-sm font-medium">{post.userName}</span>
                   </Link>
-                  {post.userId!==loginUserInfor.userId
-                  ?<div>
-                    {loginUserInforFullData.following.every(followingUserId=>followingUserId.userId!==post.userId)
-                  &&<span className="font-medium text-textFollowColor text-sm">Theo dõi</span>
-                  }
-                  </div>
-                  :<></>
-                  }
+                  {post.userId !== loginUserInfor.userId ? (
+                    <div>
+                      {loginUserInforFullData.following.every(
+                        (followingUserId) =>
+                          followingUserId.userId !== post.userId
+                      ) && (
+                        <span className="font-medium text-textFollowColor text-sm">
+                          Theo dõi
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
-              
-                <div onClick={()=>{handleShowBoxAdjustPost(post.docId,post.userId,post.docIdUser)}} className="font-medium cursor-pointer text-xl"><BsThreeDots/></div>
+
+                <div
+                  onClick={() => {
+                    handleShowBoxAdjustPost(
+                      post.docId,
+                      post.userId,
+                      post.docIdUser
+                    );
+                  }}
+                  className="font-medium cursor-pointer text-xl"
+                >
+                  <BsThreeDots />
+                </div>
               </div>
-              <div onClick={()=>{handleThrowLove()}}>
+              <div
+                onClick={() => {
+                  handleThrowLove();
+                }}
+              >
                 {post.type === "image" ? (
                   <img
                     className=" object-fill w-full"
@@ -170,9 +191,7 @@ function Posts() {
                     <FiSend className="text-[26px] cursor-pointer" />
                   </span>
                 </div>
-                <div>
-                 {}
-                </div>
+                <div>{}</div>
               </div>
               <div className="px-5 pb-5">
                 <div className="text-sm font-medium ">
@@ -184,8 +203,13 @@ function Posts() {
                 </div>
                 {post.message ? (
                   <div className="flex items-center gap-x-2 ">
-                    <div className="font-medium text-sm">{post.userName}</div>
-                    <div>{post.message}</div>
+                    <Link
+                      to={`${post.userId}`}
+                      className="font-medium text-sm cursor-pointer hover:underline hover:underline-offset-1"
+                    >
+                      {post.userName}
+                    </Link>
+                    <div className="">{post.message}</div>
                   </div>
                 ) : (
                   ""
@@ -247,7 +271,11 @@ function Posts() {
           ))}
         </div>
       ) : (
-        ""
+        <div className="w-full h-[500px] bg-whiteColor mt-5 border border-borderColor flex justify-center items-center ">
+          <p className="font-medium text-sm">
+            Theo dõi người khác để thấy bài viết ở đấy
+          </p>
+        </div>
       )}
     </div>
   );

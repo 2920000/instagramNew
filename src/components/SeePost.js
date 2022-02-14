@@ -3,65 +3,68 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
 import { FiSend, FiBookmark } from "react-icons/fi";
 import { CgSmile } from "react-icons/cg";
-import {BsThreeDots} from 'react-icons/bs'
-import { useSelector ,useDispatch} from "react-redux";
+import { BsThreeDots } from "react-icons/bs";
+import { useSelector, useDispatch } from "react-redux";
 import { selectLoginUserInfor } from "../features/loginSlice";
 import { selectAllPosts } from "../features/postsSlice";
-import { useParams } from "react-router-dom";
-import { actionHandleLoved,actionHandleSubmitComment } from "../features/postsSlice";
+import { Link, useParams } from "react-router-dom";
+import {
+  actionHandleLoved,
+  actionHandleSubmitComment,
+} from "../features/postsSlice";
 import { selectLoginUserFullData } from "../features/usersSilce";
 import { ADJUST_POST } from "../features/postsSlice";
 import moment from "moment";
 
 function SeePost() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const { postId } = useParams();
   const overlayRef = useRef();
-  const commentRef=useRef()
+  const commentRef = useRef();
   const loginUserInfor = useSelector(selectLoginUserInfor);
   const allPosts = useSelector(selectAllPosts);
   const filterPostsById = allPosts.find((post) => post.postId === postId);
-  const loginUserInforFullData=useSelector(selectLoginUserFullData)
+  const loginUserInforFullData = useSelector(selectLoginUserFullData);
 
   // handle Click ra ngoài phần tử
   // mai sửa lại
   useEffect(() => {
-    if(filterPostsById) document.body.style.overflowY='hidden'
-    else document.body.style.overflowY='auto'
-    window.onclick=function(event){
+    if (filterPostsById) document.body.style.overflowY = "hidden";
+    else document.body.style.overflowY = "auto";
+    window.onclick = function (event) {
       if (overlayRef.current === event.target) {
-        window.history.back(-1)
-        
+        window.history.back(-1);
       }
-     
-    }
+    };
   });
   // xử lý love ảnh
   const handleLove = (docId, love) => {
-    dispatch(actionHandleLoved(docId,love,loginUserInfor))
+    dispatch(actionHandleLoved(docId, love, loginUserInfor));
   };
   // Xử lý update comment
   const handleSubmit = (e, preComments, docId) => {
     e.preventDefault();
-    dispatch(actionHandleSubmitComment(preComments,docId,loginUserInfor,message))
+    dispatch(
+      actionHandleSubmitComment(preComments, docId, loginUserInfor, message)
+    );
     setMessage("");
   };
   // Xử lý khi ấn sẽ focus vào input
-  const handleFocusInput=()=>{
-    commentRef.current.focus()
-  }
-  // xử lý dispatch hiển thị hộp adjust-post  
-  const handleShowBoxAdjustPost=()=>{
-    const  data={
-      isShowOverlay:true,
-      docIdToDelete:filterPostsById.docId,
-      userIdOfPost:filterPostsById.userId,
-      docIdToUpdateNumberPosts:filterPostsById.docIdUser,
-      prePostsNumberOfUser:loginUserInforFullData.postsNumber
-     }
-     dispatch(ADJUST_POST(data))
-  }
+  const handleFocusInput = () => {
+    commentRef.current.focus();
+  };
+  // xử lý dispatch hiển thị hộp adjust-post
+  const handleShowBoxAdjustPost = () => {
+    const data = {
+      isShowOverlay: true,
+      docIdToDelete: filterPostsById.docId,
+      userIdOfPost: filterPostsById.userId,
+      docIdToUpdateNumberPosts: filterPostsById.docIdUser,
+      prePostsNumberOfUser: loginUserInforFullData.postsNumber,
+    };
+    dispatch(ADJUST_POST(data));
+  };
   return (
     <>
       {filterPostsById ? (
@@ -91,7 +94,10 @@ function SeePost() {
               <div className="bg-whiteColor hidden md:block  rounded-r-md min-w-[420px] max-w-[500px] grow">
                 <div className="flex flex-col h-full">
                   <div className="flex   justify-between border-b p-3  border-borderLightColor items-center">
-                     <div className="flex  items-center gap-x-4 ">
+                    <Link
+                      to={`/${filterPostsById.userId}`}
+                      className="flex  items-center gap-x-4 "
+                    >
                       <img
                         className="w-8 h-8 rounded-full cursor-pointer"
                         src={filterPostsById.avatar}
@@ -100,25 +106,34 @@ function SeePost() {
                       <span className="text-sm font-medium cursor-pointer">
                         {filterPostsById.userName}
                       </span>
-                     </div>
-                     <span onClick={()=>{handleShowBoxAdjustPost()}} className="cursor-pointer"><BsThreeDots/>
-                      
-                     </span>
-                   
+                    </Link>
+                    <span
+                      onClick={() => {
+                        handleShowBoxAdjustPost();
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <BsThreeDots />
+                    </span>
                   </div>
                   <div className="flex grow w-full overflow-y-auto ">
                     <div className="w-full">
                       <div className="flex gap-x-4 p-3 ">
-                        <img
-                          className="w-8 h-8 rounded-full"
-                          src={filterPostsById.avatar}
-                          alt=""
-                        />
+                        <Link to={`/${filterPostsById.userId}`}>
+                          <img
+                            className="w-8 h-8 rounded-full"
+                            src={filterPostsById.avatar}
+                            alt=""
+                          />
+                        </Link>
                         <div className="flex flex-col ">
                           <div className="flex items-center gap-x-2">
-                            <span className="text-sm font-medium cursor-pointer">
+                            <Link
+                              to={`/${filterPostsById.userId}`}
+                              className="text-sm font-medium cursor-pointer"
+                            >
                               {filterPostsById.userName}
-                            </span>
+                            </Link>
                             <span className="font-light">
                               {filterPostsById.message}
                             </span>
@@ -136,16 +151,21 @@ function SeePost() {
                             <div key={comment.commentId}>
                               <div className="flex items-center justify-between p-3 w-full">
                                 <div className="flex gap-x-4  ">
-                                  <img
-                                    className="w-8 h-8 rounded-full"
-                                    src={comment.avatar}
-                                    alt=""
-                                  />
+                                  <Link to={`/${filterPostsById.userId}`}>
+                                    <img
+                                      className="w-8 h-8 rounded-full"
+                                      src={comment.avatar}
+                                      alt=""
+                                    />
+                                  </Link>
                                   <div className="flex flex-col ">
                                     <div className="flex items-center gap-x-2">
-                                      <span className="text-sm font-medium cursor-pointer">
+                                      <Link
+                                        to={`/${filterPostsById.userId}`}
+                                        className="text-sm font-medium cursor-pointer"
+                                      >
                                         {comment.name}
-                                      </span>
+                                      </Link>
                                       <span className="font-light">
                                         {comment.comment}
                                       </span>
@@ -204,7 +224,12 @@ function SeePost() {
                           </div>
                         </span>
 
-                        <span onClick={handleFocusInput} className='hover:opacity-50' ><BiMessageRounded className="text-[27px]  cursor-pointer" /></span>
+                        <span
+                          onClick={handleFocusInput}
+                          className="hover:opacity-50"
+                        >
+                          <BiMessageRounded className="text-[27px]  cursor-pointer" />
+                        </span>
                         <FiSend className="text-[25px] hover:opacity-50  cursor-pointer" />
                       </div>
                       <div>
@@ -261,7 +286,6 @@ function SeePost() {
       ) : (
         ""
       )}
-   
     </>
   );
 }

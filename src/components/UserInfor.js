@@ -14,10 +14,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionUpdateFollow } from "../features/usersSilce";
 import Footer from "./Footer";
 import { selectLoginUserFullData } from "../features/usersSilce";
-import { UNFOLLOW_BOX } from "../features/followSlice";
+import {
+  UNFOLLOW_BOX,
+  SEE_FOLLOWERS,
+  SEE_FOLLOWING,
+} from "../features/followSlice";
 import SeeFollowing from "./SeeFollowing";
 import { actionNavigateToChatBox } from "../features/chatSlice";
 import { selectBoxId } from "../features/chatSlice";
+import SeeFollowers from "./SeeFollowers";
 function UserInfor() {
   const dispatch = useDispatch();
   const allUsers = useSelector(selectAllUsers);
@@ -33,7 +38,7 @@ function UserInfor() {
     const handleFollow = () => {
       dispatch(actionUpdateFollow(loginUserFullData, filterUserById));
     };
-// xử lý unfollow
+    // xử lý unfollow
     const handleUnFollow = () => {
       const unfollowBoxWithOverlay = {
         isShow: true,
@@ -55,7 +60,17 @@ function UserInfor() {
       );
     };
     // mai sửa lại ,nếu có dữ liệu r thì dùng link luôn
-
+    const handleShowFollowingBox = () => {
+      if (filterUserById.following.length > 0) {
+        dispatch(SEE_FOLLOWING(true));
+      }
+    };
+    //
+    const handleShowFollowersBox = () => {
+      if (filterUserById.followers.length > 0) {
+        dispatch(SEE_FOLLOWERS(true));
+      }
+    };
     return (
       <div className="mt-[40px]">
         <div className="max-w-[990px] pt-[10px] md:pt-[30px] px-0 md:px-[20px] m-auto h-[200px]">
@@ -88,13 +103,27 @@ function UserInfor() {
                       </span>{" "}
                       bài viết
                     </span>
-                    <span>
+                    <span
+                      onClick={handleShowFollowersBox}
+                      className={
+                        filterUserById.followers.length > 0
+                          ? "cursor-pointer"
+                          : ""
+                      }
+                    >
                       <span className="font-medium cursor-pointer">
                         {filterUserById.followers.length}
                       </span>{" "}
                       người theo dõi
                     </span>
-                    <span>
+                    <span
+                      onClick={handleShowFollowingBox}
+                      className={
+                        filterUserById.following.length > 0
+                          ? "cursor-pointer"
+                          : ""
+                      }
+                    >
                       {" "}
                       Đang theo dõi{" "}
                       <span className="font-medium cursor-pointer">
@@ -183,16 +212,30 @@ function UserInfor() {
                       </span>{" "}
                       bài viết
                     </span>
-                    <span>
-                      <span className="font-medium cursor-pointer">
+                    <span
+                      onClick={handleShowFollowersBox}
+                      className={
+                        filterUserById.followers.length > 0
+                          ? "cursor-pointer"
+                          : ""
+                      }
+                    >
+                      <span className="font-medium ">
                         {filterUserById.followers.length}
                       </span>{" "}
                       người theo dõi
                     </span>
-                    <span>
+                    <span
+                      onClick={handleShowFollowingBox}
+                      className={
+                        filterUserById.following.length > 0
+                          ? "cursor-pointer"
+                          : ""
+                      }
+                    >
                       {" "}
                       Đang theo dõi{" "}
-                      <span className="font-medium cursor-pointer">
+                      <span className="font-medium ">
                         {filterUserById.following.length}
                       </span>{" "}
                       người dùng{" "}
@@ -249,7 +292,8 @@ function UserInfor() {
           </div>
           <Footer />
         </div>
-        {/* <SeeFollowing/> */}
+        <SeeFollowing />
+        <SeeFollowers />
       </div>
     );
   } else {
